@@ -553,21 +553,21 @@ declare namespace wx {
 
     interface SystemInfo {
         /** 手机型号 */
-        model: string;
+        model?: string;
         /** 设备像素比 */
-        pixelRatio: number;
+        pixelRatio?: number;
         /** 窗口宽度 */
-        windowWidth: number;
+        windowWidth?: number;
         /** 窗口高度 */
-        windowHeight: number;
+        windowHeight?: number;
         /** 微信设置的语言 */
-        language: string;
+        language?: string;
         /** 微信版本号 */
-        version: string;
+        version?: string;
         /**客户端基础库版本号 */
-        SDKVersion: string;
+        SDKVersion?: string;
         /**系统 */
-        system: string;
+        system?: string;
     }
     interface GetSystemInfoOptions {
         /** 成功获取系统信息的回调 */
