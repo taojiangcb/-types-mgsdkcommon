@@ -24,8 +24,8 @@ declare namespace wx {
     }
 
     interface ShareRespose {
-        shareTickets: Array<string>;                    //每一项是一个 string 类型的 ShareTicket ，对应每个群。如果此次转发是带 shareTicket 的转发则会有回调此参数。可作为 wx.getShareInfo() 的参数来获取群 id。
-        groupMsgInfos: Array<Array<any>>;               //群消息票据信息列表，长度与 res.shareTickets 相等
+        shareTickets?: Array<string>;                    //每一项是一个 string 类型的 ShareTicket ，对应每个群。如果此次转发是带 shareTicket 的转发则会有回调此参数。可作为 wx.getShareInfo() 的参数来获取群 id。
+        groupMsgInfos?: Array<Array<any>>;               //群消息票据信息列表，长度与 res.shareTickets 相等
     }
 
     interface PageOptions {
@@ -1247,6 +1247,7 @@ declare namespace wx {
      * @param obj 
      */
     function showShareMenu(obj: { withShareTicket: boolean, success?: Function, fail?: Function, complete?: Function })
+    function hideShareMenu(obj: {success?: Function, fail?: Function, complete?: Function })
     /**
      * 获取转发详细信息
      * @param obj 

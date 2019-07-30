@@ -17,11 +17,11 @@ declare namespace mgsdk {
 
     /**生命周期配置 */
     type PlatLifeOpts = {
-        onReady: ((res?: any) => void);                  //生命周期函数--监听页面加载 
-        onShow: ((res?: any) => void);                  //应用到前台时处理
-        onHide: ((res?: any) => void);                  //应用到后台时处理
-        onError: ((error?: any) => void);               //平台捕获到异常时处理
-        onExit: (() => void);                          //退出时处理
+        //onReady?:((res?: any) => void);                  //生命周期函数--监听页面加载 
+        onShow?:((res?: iLaunchData) => void);                  //应用到前台时处理
+        onHide?:((res?: any) => void);                  //应用到后台时处理
+        onError?:((error?: any) => void);               //平台捕获到异常时处理
+        //onExit?:(() => void);                          //退出时处理
     }
 
     /** 运行时获取的启动参数 */
@@ -83,13 +83,13 @@ declare namespace mgsdk {
         sdk_server_local: string;                        //本地平台服务地址
         mode: 0 | 1 | 2;                                 //sdk 运行的模式 0本地开发，1线上测试，2线上正式
         sdk_server_url: string;                          //平台服务的地址
-        cdnUrl?:string;
+        cdnUrl?: string;
     }
 
     interface iPlat {
-        login(opts: iLoginResponseOpts);                     //登录平台
-        getLaunchOptionsSync(): iLaunchData               //获取启动参数
-        cliConfig?: {                                    //从服务端获取到的 配置信息 
+        login(opts: iLoginResponseOpts);                        //登录平台
+        getLaunchOptionsSync(): iLaunchData                     //获取启动参数
+        cliConfig?: {                                           //从服务端获取到的 配置信息 
             version?: { o: string, t: string, l: string }       //o 线上版本，t 测试版本, l 最小版本
         }
     }
@@ -107,11 +107,60 @@ declare namespace mgsdk {
         /** 取出本地数据 */
         getItem(key: string): any;
         /**获取平台系统信息 */
-        getSystemInfoAsync():iSystemInfo;
+        getSystemInfoAsync(): iSystemInfo;
+    }
+
+    interface iSdkLife {
+
+        onShow(callBack?:(res?: mgsdk.iLaunchData) => void);                  //应用到前台时处理
+        offShow(callFunc: Function): void;
+        
+        onHide(callBack?:(res?: any) => void);                  //应用到后台时处理
+        offHide(callFunc: Function): void;
+        
+        onError?(callBack?:(error?: any) => void);               //平台捕获到异常时处理
+        offError?(callFunc: Function): void;
+        
+        //onExit?(callBack?:() => void);                           //退出时处理
+        //offExit?(callFunc: Function): void;
+
+        //onReady?(callBack?:(res?: any) => void);                 //生命周期函数--监听页面加载 
+        //offReady?(callFun: Function): void;
+    }
+
+
+    interface iShareMenuOpts {
+        withShareTicket?:boolean,
+        success?: Function, 
+        fail?: Function, 
+        complete?: Function
+    }
+
+    interface iShareRespose extends wx.ShareRespose {}
+
+    interface iShareContext {
+        title?: string, 
+        imageUrl?: string, 
+        query?: string, 
+        imageUrlId?:string,
+        success?:(res?:iShareRespose)=>void, 
+        fail?: Function, 
+        complete?: Function 
+    }
+
+
+    interface iShare {
+        showShareMenu?(opts:iShareMenuOpts);
+        hideShareMenu?(opts:iShareMenuOpts);
+
+        shareAppMessage?(obj:iShareContext);
+        onShareAppMessage?(callBack:()=>iShareContext);
+
+        offShareAppMessage?(callBack:()=>void);
     }
 
     interface iSystemInfo extends wx.SystemInfo {
-        isIos?:boolean
+        isIos?: boolean
     }
 
     /**
@@ -122,13 +171,14 @@ declare namespace mgsdk {
      */
     function init(opts: PlatInitOps, lifeOpts?: PlatLifeOpts, platSetting?: iSetting);
 
-    var lifeOpts: PlatLifeOpts;
+    var sdkLife: iSdkLife;
     var initOpts: PlatInitOps;
     var user: iPlatUser;
     var setting: iSetting;
     var plat: iPlat;
     var native: iNative;
-    var define: iDefine
+    var define: iDefine;
+    var share:iShare;
 
     //=================RESP======================
     /** 平台登录接口返回 **/
@@ -156,6 +206,53 @@ declare namespace mgsdk {
          */
         stack?: string;
     }
+
+    /**
+ * 分享接口的内容
+ */
+    // interface IShareContext {
+    //     /**
+    //      * 分享的标题 
+    //      */
+    //     title?: string;
+    //     /**
+    //      * 分享的文本显示
+    //      */
+    //     text?: string;
+    //     /**
+    //      * 有效平台:facebook 
+    //      * facebook平台: 图片base64编码
+    //      * 玩一玩平台:url 地址
+    //      */
+    //     image?: string;
+    //     /**
+    //      * 有效平台:facebook,sina
+    //      * 表示共享的目标
+    //      * Indicates the intent of the share.
+    //      * "INVITE" | "REQUEST" | "CHALLENGE" | "SHARE"
+    //      * 邀请，请求，挑战，分享
+    //      */
+    //     ShareType?: string;
+    //     /**
+    //      * 有效平台:facebook,玩一玩
+    //      * 分享启动的附加数据，facebook 比如跳转游戏时启动的数据
+    //      */
+    //     data?: any;
+    //     /**
+    //      * 有效平台:sina
+    //      * 邀请识别码,这里要将ShareType设置为INVITE
+    //      */
+    //     cpext?: string;
+    //     /**用于统计分享的点击的key */
+    //     shareId?: string;
+    //     /**使用平台配置分享时需要传入的参数 */
+    //     kId?: string;
+    //     /**视频的路径 */
+    //     videoPath?: string;
+    //     fbChooseData?: any;
+
+    // }
+
 }
 
 type DataResponseCallback = (res: iRespBase) => void;
