@@ -1341,9 +1341,7 @@ interface Canvas {
     toDataURL(): string;
 }
 
-interface RenderingContext {
-
-}
+//interface RenderingContext { }
 
 interface OpenDataContext {
     canvas: Canvas;

@@ -6,21 +6,21 @@ declare namespace mgsdk {
     type PlatInitOps = {
         platId: number,                              //平台id
         gameId: number,                              //平台游戏id
-        success: (res?: any) => void,                   //平台 登录成功之后回调
-        fail: (msg?: string) => void                    //平台 登录失败时候回调
+        success: (res?: any) => void,                //平台 登录成功之后回调
+        fail: (msg?: string) => void                 //平台 登录失败时候回调
 
         libUrl?: string,                             //第三方sdk 如果有先要加载  第三方h5 有用
         outLog?: boolean,                            //是否调试 log 的日志显示
-        mode?: 0 | 1 | 2,                                //0开发模式,1测试服务，2线上服务
+        mode?: 0 | 1 | 2,                            //0开发模式,1测试服务，2线上服务
         sdk_server_deg: string,                      //开发服务的地址
     }
 
     /**生命周期配置 */
     type PlatLifeOpts = {
-        //onReady?:((res?: any) => void);                  //生命周期函数--监听页面加载 
-        onShow?:((res?: iLaunchData) => void);                  //应用到前台时处理
-        onHide?:((res?: any) => void);                  //应用到后台时处理
-        onError?:((error?: any) => void);               //平台捕获到异常时处理
+        //onReady?:((res?: any) => void);                //生命周期函数--监听页面加载 
+        onShow?:((res?: iLaunchData) => void);           //应用到前台时处理
+        onHide?:((res?: any) => void);                   //应用到后台时处理
+        onError?:((error?: any) => void);                //平台捕获到异常时处理
         //onExit?:(() => void);                          //退出时处理
     }
 
@@ -39,18 +39,18 @@ declare namespace mgsdk {
         /**启动小游戏的 query 参数 */
         query?: any;
         /**  */
-        shareTicket?: string;
+        shareTicket?: string;                   //shareTickets
         /**来源信息。从另一个小程序、公众号或 App 进入小程序时返回。否则返回 */
         referrerInfo?: {
-            appId?: string,             //来源小程序、公众号或 App 的 appId
-            extraData?: any;	           //object	来源小程序传过来的数据，scene=1037或1038时支持
+            appId?: string,                     //来源小程序、公众号或 App 的 appId
+            extraData?: any;	                //object	来源小程序传过来的数据，scene=1037或1038时支持
         }
     }
 
     interface PlatLoginParams {
         platUser: iPlatUser,                             //登录的用户
-        platId: number,
-        gameId: number,
+        platId: number,                                  // 平台id
+        gameId: number,                                  // 游戏 id 
         fromChannel: string,                             //来自渠道 wx 平台对应 secne 启动小游戏的场景值
         fromUser: string,                                //来自哪个用户
         fromAppId: string,                               //来自哪个应用
@@ -110,22 +110,17 @@ declare namespace mgsdk {
         getSystemInfoAsync(): iSystemInfo;
     }
 
+    /**生命周期对象 */
     interface iSdkLife {
 
-        onShow(callBack?:(res?: mgsdk.iLaunchData) => void);                  //应用到前台时处理
+        onShow(callBack?:(res?: mgsdk.iLaunchData) => void);             //应用到前台时处理
         offShow(callFunc: Function): void;
         
-        onHide(callBack?:(res?: any) => void);                  //应用到后台时处理
+        onHide(callBack?:(res?: any) => void);                          //应用到后台时处理
         offHide(callFunc: Function): void;
         
-        onError?(callBack?:(error?: any) => void);               //平台捕获到异常时处理
+        onError?(callBack?:(error?: any) => void);                      //平台捕获到异常时处理
         offError?(callFunc: Function): void;
-        
-        //onExit?(callBack?:() => void);                           //退出时处理
-        //offExit?(callFunc: Function): void;
-
-        //onReady?(callBack?:(res?: any) => void);                 //生命周期函数--监听页面加载 
-        //offReady?(callFun: Function): void;
     }
 
 
@@ -139,29 +134,25 @@ declare namespace mgsdk {
     interface iShareRespose extends wx.ShareRespose {}
 
     interface iShareContext {
-        title?: string, 
+        title?: string,                                 
         imageUrl?: string, 
         query?: string, 
         imageUrlId?:string,
         success?:(res?:iShareRespose)=>void, 
         fail?: Function, 
-        complete?: Function 
+        complete?: Function
     }
 
-
+    /** 分享的对象 */
     interface iShare {
         showShareMenu?(opts:iShareMenuOpts);
         hideShareMenu?(opts:iShareMenuOpts);
-
         shareAppMessage?(obj:iShareContext);
         onShareAppMessage?(callBack:()=>iShareContext);
-
         offShareAppMessage?(callBack:()=>void);
     }
 
-    interface iSystemInfo extends wx.SystemInfo {
-        isIos?: boolean
-    }
+    interface iSystemInfo extends wx.SystemInfo { isIos?: boolean }
 
     /**
      * sdk 初始化
@@ -182,9 +173,7 @@ declare namespace mgsdk {
 
     //=================RESP======================
     /** 平台登录接口返回 **/
-    interface iPlatLoginResp {
-        user?: mgsdk.iPlatUser,
-    }
+    interface iPlatLoginResp { user?: mgsdk.iPlatUser }
 
     /**获取平台接口返回 */
     interface iPlatInfoResp {
@@ -206,53 +195,6 @@ declare namespace mgsdk {
          */
         stack?: string;
     }
-
-    /**
- * 分享接口的内容
- */
-    // interface IShareContext {
-    //     /**
-    //      * 分享的标题 
-    //      */
-    //     title?: string;
-    //     /**
-    //      * 分享的文本显示
-    //      */
-    //     text?: string;
-    //     /**
-    //      * 有效平台:facebook 
-    //      * facebook平台: 图片base64编码
-    //      * 玩一玩平台:url 地址
-    //      */
-    //     image?: string;
-    //     /**
-    //      * 有效平台:facebook,sina
-    //      * 表示共享的目标
-    //      * Indicates the intent of the share.
-    //      * "INVITE" | "REQUEST" | "CHALLENGE" | "SHARE"
-    //      * 邀请，请求，挑战，分享
-    //      */
-    //     ShareType?: string;
-    //     /**
-    //      * 有效平台:facebook,玩一玩
-    //      * 分享启动的附加数据，facebook 比如跳转游戏时启动的数据
-    //      */
-    //     data?: any;
-    //     /**
-    //      * 有效平台:sina
-    //      * 邀请识别码,这里要将ShareType设置为INVITE
-    //      */
-    //     cpext?: string;
-    //     /**用于统计分享的点击的key */
-    //     shareId?: string;
-    //     /**使用平台配置分享时需要传入的参数 */
-    //     kId?: string;
-    //     /**视频的路径 */
-    //     videoPath?: string;
-    //     fbChooseData?: any;
-
-    // }
-
 }
 
 type DataResponseCallback = (res: iRespBase) => void;
